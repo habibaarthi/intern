@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Animation Classes */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideInFromLeft {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideInFromRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Container Styles */
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            transition: all 0.5s ease;
+            animation: fadeIn 0.6s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0.3),
+                rgba(255, 255, 255, 0)
+            );
+            transform: rotate(30deg);
+            z-index: 0;
+        }
+
+        /* Form Styles */
+        .form-container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #4a4a4a;
+            font-weight: 600;
+            font-size: 1.8rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #555;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .form-group input.error {
+            border-color: #ff3860;
+        }
+
+        .error-message {
+            color: #ff3860;
+            font-size: 0.8rem;
+            margin-top: 0.3rem;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(to right, #667eea, #764ba2);
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+            transform: translateX(-100%);
+            transition: transform 0.4s ease;
+        }
+
+        .btn:hover::after {
+            transform: translateX(100%);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #666;
+        }
+
+        .form-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .form-footer a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            text-align: center;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .dashboard h1 {
+            color: #4a4a4a;
+            margin-bottom: 1.5rem;
+        }
+
+        .user-info {
+            background: rgba(255, 255, 255, 0.7);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            animation: slideInFromLeft 0.5s ease-out;
+        }
+
+        .logout-btn {
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.4);
+            animation: slideInFromRight 0.5s ease-out;
+        }
+
+        .logout-btn:hover {
+            box-shadow: 0 6px 20px rgba(255, 65, 108, 0.6);
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: rotate 1s ease-in-out infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+
+        .shake {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translateX(-1px); }
+            20%, 80% { transform: translateX(2px); }
+            30%, 50%, 70% { transform: translateX(-4px); }
+            40%, 60% { transform: translateX(4px); }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="auth-container">
+        <!-- Login Form -->
+        <div class="form-container" id="login-form">
+            <h1 class="form-title">Welcome Back</h1>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" required>
+                    <div class="error-message" id="login-email-error">Please enter a valid email</div>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required minlength="6">
+                    <div class="error-message" id="login-password-error">Password must be at least 6 characters</div>
+                </div>
+                <button type="submit" class="btn" id="login-btn">
+                    <span id="login-text">Login</span>
+                    <span id="login-spinner" class="spinner hidden"></span>
+                </button>
+            </form>
+            <div class="form-footer">
+                Don't have an account? <a href="#" id="show-register">Register</a>
+            </div>
+        </div>
+
+        <!-- Register Form -->
+        <div class="form-container hidden" id="register-form">
+            <h1 class="form-title">Create Account</h1>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="register-name">Full Name</label>
+                    <input type="text" id="register-name" required>
+                    <div class="error-message" id="register-name-error">Please enter your name</div>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" required>
+                    <div class="error-message" id="register-email-error">Please enter a valid email</div>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" required minlength="6">
+                    <div class="error-message" id="register-password-error">Password must be at least 6 characters</div>
+                </div>
+                <div class="form-group">
+                    <label for="register-confirm-password">Confirm Password</label>
+                    <input type="password" id="register-confirm-password" required>
+                    <div class="error-message" id="register-confirm-error">Passwords don't match</div>
+                </div>
+                <button type="submit" class="btn" id="register-btn">
+                    <span id="register-text">Register</span>
+                    <span id="register-spinner" class="spinner hidden"></span>
+                </button>
+            </form>
+            <div class="form-footer">
+                Already have an account? <a href="#" id="show-login">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard (hidden initially) -->
+    <div class="container hidden" id="dashboard">
+        <div class="dashboard">
+            <h1>Welcome to Your Dashboard</h1>
+            <div class="user-info">
+                <h2 id="user-name">User Name</h2>
+                <p id="user-email">user@example.com</p>
+            </div>
+            <button class="btn logout-btn" id="logout-btn">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const authContainer = document.getElementById('auth-container');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const dashboard = document.getElementById('dashboard');
+        const showRegister = document.getElementById('show-register');
+        const showLogin = document.getElementById('show-login');
+        const loginBtn = document.getElementById('login-btn');
+        const registerBtn = document.getElementById('register-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const loginSpinner = document.getElementById('login-spinner');
+        const registerSpinner = document.getElementById('register-spinner');
+        const loginText = document.getElementById('login-text');
+        const registerText = document.getElementById('register-text');
+
+        // Mock database
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+        // Check if user is already logged in
+        if (currentUser) {
+            showDashboard(currentUser);
+        }
+
+        // Event Listeners
+        showRegister.addEventListener('click', (e) => {
+            e.preventDefault();
+            switchForms(loginForm, registerForm);
+        });
+
+        showLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            switchForms(registerForm, loginForm);
+        });
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            handleLogin();
+        });
+
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            handleRegister();
+        });
+
+        logoutBtn.addEventListener('click', handleLogout);
+
+        // Functions
+        function switchForms(hideForm, showForm) {
+            hideForm.classList.add('hidden');
+            showForm.classList.remove('hidden');
+            authContainer.classList.add('pulse');
+            setTimeout(() => {
+                authContainer.classList.remove('pulse');
+            }, 500);
+        }
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(String(email).toLowerCase());
+        }
+
+        function showError(input, errorElement, message) {
+            input.classList.add('error');
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            input.parentElement.classList.add('shake');
+            setTimeout(() => {
+                input.parentElement.classList.remove('shake');
+            }, 500);
+        }
+
+        function clearError(input, errorElement) {
+            input.classList.remove('error');
+            errorElement.style.display = 'none';
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const emailError = document.getElementById('login-email-error');
+            const passwordError = document.getElementById('login-password-error');
+
+            // Validate inputs
+            let isValid = true;
+
+            if (!validateEmail(email)) {
+                showError(document.getElementById('login-email'), emailError, 'Please enter a valid email');
+                isValid = false;
+            } else {
+                clearError(document.getElementById('login-email'), emailError);
+            }
+
+            if (password.length < 6) {
+                showError(document.getElementById('login-password'), passwordError, 'Password must be at least 6 characters');
+                isValid = false;
+            } else {
+                clearError(document.getElementById('login-password'), passwordError);
+            }
+
+            if (!isValid) return;
+
+            // Show loading state
+            loginText.textContent = 'Logging in...';
+            loginSpinner.classList.remove('hidden');
+            loginBtn.disabled = true;
+
+            // Simulate API call
+            setTimeout(() => {
+                const user = users.find(u => u.email === email && u.password === password);
+                if (user) {
+                    currentUser = { name: user.name, email: user.email };
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    showDashboard(currentUser);
+                } else {
+                    authContainer.classList.add('shake');
+                    setTimeout(() => {
+                        authContainer.classList.remove('shake');
+                    }, 500);
+                    showError(document.getElementById('login-password'), passwordError, 'Invalid email or password');
+                }
+
+                // Reset button state
+                loginText.textContent = 'Login';
+                loginSpinner.classList.add('hidden');
+                loginBtn.disabled = false;
+            }, 1500);
+        }
+
+        function handleRegister() {
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-confirm-password').value;
+
+            const nameError = document.getElementById('register-name-error');
+            const emailError = document.getElementById('register-email-error');
+            const passwordError = document.getElementById('register-password-error');
+            const confirmError = document.getElementById('register-confirm-error');
+
+            // Validate inputs
+            let isValid = true;
+
+            if (name.trim() === '') {
+                showError(document.getElementById('register-name'), nameError, 'Please enter your name');
+                isValid = false;
+            } else {
+                clearError(document.getElementById('register-name'), nameError);
+            }
+
+            if (!validateEmail(email)) {
+                showError(document.getElementById('register-email'), emailError, 'Please enter a valid email');
+                isValid = false;
+            } else if (users.some(u => u.email === email)) {
+                showError(document.getElementById('register-email'), emailError, 'Email already registered');
+                isValid = false;
+            } else {
+                clearError(document.getElementById('register-email'), emailError);
+            }
+
+            if (password.length < 6) {
+                showError(document.getElementById('register-password'), passwordError, 'Password must be at least 6 characters');
+                isValid = false;
+            } else {
+                clearError(document.getElementById('register-password'), passwordError);
+            }
+
+            if (password !== confirmPassword) {
+                showError(document.getElementById('register-confirm-password'), confirmError, 'Passwords do not match');
+                isValid = false;
+            } else {
+                clearError(document.getElementById('register-confirm-password'), confirmError);
+            }
+
+            if (!isValid) return;
+
+            // Show loading state
+            registerText.textContent = 'Registering...';
+            registerSpinner.classList.remove('hidden');
+            registerBtn.disabled = true;
+
+            // Simulate API call
+            setTimeout(() => {
+                const newUser = { name, email, password };
+                users.push(newUser);
+                localStorage.setItem('users', JSON.stringify(users));
+
+                // Show success and switch to login
+                registerText.textContent = 'Success!';
+                setTimeout(() => {
+                    registerText.textContent = 'Register';
+                    registerSpinner.classList.add('hidden');
+                    registerBtn.disabled = false;
+                    switchForms(registerForm, loginForm);
+                    document.getElementById('login-email').value = email;
+                }, 1000);
+            }, 1500);
+        }
+
+        function showDashboard(user) {
+            authContainer.classList.add('hidden');
+            dashboard.classList.remove('hidden');
+            document.getElementById('user-name').textContent = user.name;
+            document.getElementById('user-email').textContent = user.email;
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            dashboard.classList.add('hidden');
+            authContainer.classList.remove('hidden');
+            switchForms(registerForm, loginForm);
+            document.getElementById('loginForm').reset();
+        }
+
+        // Input validation on blur
+        document.getElementById('login-email').addEventListener('blur', function() {
+            if (!validateEmail(this.value)) {
+                showError(this, document.getElementById('login-email-error'), 'Please enter a valid email');
+            } else {
+                clearError(this, document.getElementById('login-email-error'));
+            }
+        });
+
+        document.getElementById('login-password').addEventListener('blur', function() {
+            if (this.value.length < 6) {
+                showError(this, document.getElementById('login-password-error'), 'Password must be at least 6 characters');
+            } else {
+                clearError(this, document.getElementById('login-password-error'));
+            }
+        });
+
+        document.getElementById('register-email').addEventListener('blur', function() {
+            if (!validateEmail(this.value)) {
+                showError(this, document.getElementById('register-email-error'), 'Please enter a valid email');
+            } else if (users.some(u => u.email === this.value)) {
+                showError(this, document.getElementById('register-email-error'), 'Email already registered');
+            } else {
+                clearError(this, document.getElementById('register-email-error'));
+            }
+        });
+
+        document.getElementById('register-password').addEventListener('blur', function() {
+            if (this.value.length < 6) {
+                showError(this, document.getElementById('register-password-error'), 'Password must be at least 6 characters');
+            } else {
+                clearError(this, document.getElementById('register-password-error'));
+            }
+        });
+
+        document.getElementById('register-confirm-password').addEventListener('blur', function() {
+            const password = document.getElementById('register-password').value;
+            if (this.value !== password) {
+                showError(this, document.getElementById('register-confirm-error'), 'Passwords do not match');
+            } else {
+                clearError(this, document.getElementById('register-confirm-error'));
+            }
+        });
+    </script>
+</body>
+</html>
