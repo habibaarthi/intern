@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drone Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/4154a3d196.js" crossorigin="anonymous"></script>
+</head>
+<body>
+ <div id="header">
+    <div class="container">
+        <nav>
+            <img src="images/drone2.jpeg" class="logo">
+            <ul id="sidemenu">
+                <li><a href="#header">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#speed">System</a></li>
+                <li><a href="#portfolio">Axis rotation</a></li>
+            </ul>
+        </nav>
+        <div class="header-text">
+            <p>Fly Beyond Limits</p>
+            <h1> Virtual <span>Drone</span><br>Telemetry Interface</h1>
+        </div>
+    </div>
+ </div>   
+<!------About---------><div id="about">
+    <div class="container">
+        <div class="row">
+         <div class="about-col-1">
+             <div class="tenor-gif-embed" data-postid="25942421" data-share-method="host" data-aspect-ratio="1.77778" data-width="100%">
+                 <a href="https://tenor.com/view/delivery-gif-25942421">Delivery GIF</a>from 
+                 <a href="https://tenor.com/search/delivery-gifs">Delivery GIFs</a>
+             </div>
+             <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+         </div>
+         <div class="about-col-2">
+             <h1 class="sub-title">Drone Technology</h1>
+             <p>A drone refers to an aerial vehicle that receives remote commands from a pilot or relies on software for autonomous flight. Many drones display features like cameras for collecting visual data and propellers for stabilizing their flight patterns.</p>
+                 <div class="tab-titles">
+                     <p class="tab-links active-link" onclick="opentab('speed')">Speed</p>
+                     <p class="tab-links" onclick="opentab('oreintation')">Orientation</p>
+                     <p class="tab-links" onclick="opentab('direction')">Direction</p>
+                 </div>
+                 <div class="tab-contents active-tab" id="speed">
+                     <ul>
+                         <li><span>200km/hr</span><br>Maximum speed</li>
+                         <li><span>120km/hr</span><br>Cruising speed</li>
+                         <li><span>50km/hr</span><br>Delivery speed</li>
+                     </ul>
+                 </div>
+                 <div class="tab-contents" id="oreintation">
+                     <ul>
+                         <li><span>Gyroscope</span><br>Stabilization</li>
+                         <li><span>Accelerometer</span><br>Tilt detection</li>
+                         <li><span>Magnetometer</span><br>Compass orientation</li>
+                     </ul>
+                 </div>
+                 <div class="tab-contents" id="direction">
+                     <ul>
+                         <li><span>X axis</span><br>Left/Right movement</li>
+                         <li><span>Y axis</span><br>Forward/Backward</li>
+                         <li><span>Z axis</span><br>Up/Down</li>
+                     </ul>
+                 </div>
+         </div>
+        </div>
+     </div>
+ </div>
+ 
+<!-----------services-------->
+<div class="services">
+    <div class="container">
+        <h1 class="sub-title" >System Categorization</h1>
+        <div class="services-list">
+           <div>
+            <i class="fa-solid fa-battery-three-quarters"></i>
+            <h2>Drone Battery Insights</h2>
+            <p>The battery is a crucial component in drones, as it powers all the essential systems including the motors, flight controller, sensors, GPS module, and communication interfaces. Most drones today use Lithium Polymer (Li-Po) batteries due to their lightweight nature and high discharge rates.</p>
+                <a href="#">Learn more</a>
+           </div> 
+           <div>
+            <i class="fa-solid fa-tower-cell"></i>
+            <h2>Radio Communication</h2>
+            <p>Drones rely on radio transmission and receiver systems for seamless communication between the drone and the ground control station.wireless transfer of both control commands and telemetry data done by transmitter and reciever.</p>
+                <a href="#">Learn more</a>
+           </div> 
+           <div>
+            <i class="fa-solid fa-jet-fighter"></i>
+            <h2>Autopilot</h2>
+            <p>The Flight Controller (FC) is the central processing unit.It acts as the brain of the system, responsible for managing all aspects of flight, including stabilization, navigation, orientation</p>
+                <a href="#">Learn more</a>
+           </div> 
+        </div>
+    </div>
+</div>
+<!--------porfolio------------------------>
+<div id="portfolio">
+  <div class="container">
+    <h1 class="sub-title" >Wiggle in the Wind</h1>
+    <div class="work-list">
+        <div class="work">
+            <img src="images/Pitch.jpg">
+            <div class="layer">
+                <h3>PITCH</h3>
+                <p> I want to move the drone forward. then I will slow down the front propeller speed while the rear propellers speed up. This will cause pitch motion</p>
+                <a href="#"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            </div>
+        </div>
+        <div class="work">
+            <img src="images/Roll.jpg">
+            <div class="layer">
+                <h3>ROLL</h3>
+                <p>rotation of the drone around its longitudinal axis, which runs from the front to the back of the drone,this movement is carried out by creating an imbalanced lift force</p>
+                <a href="#"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            </div>
+        </div>
+        <div class="work">
+            <img src="images/Yaw.jpg">
+            <div class="layer">
+                <h3>YAW</h3>
+                <p>rotation of the drone around its vertical axis. When the drone turns left or right without changing its tilt (pitch or roll), that’s yaw movement.</p>
+                <a href="#"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+            </div>
+        </div>
+    
+</div>
+
+<script>
+    var tablinks = document.getElementsByClassName("tab-links");
+    var tabcontents = document.getElementsByClassName("tab-contents");
+     
+    function opentab(tabname){
+        for(tablink of tablinks){
+            tablink.classList.remove("active-link");   
+        }
+        for(tabcontent of tabcontents){
+            tabcontent.classList.remove("active-tab");   
+        }
+        event.currentTarget.classList.add("active-link");
+        document.getElementById(tabname).classList.add("active-tab");
+    }
+</script>
+<!----------------------speed--><div id="speed">
+<title>Drone Motor Speed Calculator</title>
+<style>
+    
+    h1 {
+        margin-top: 100px;
+        color: #eaedf1;
+        text-align: center;
+        margin-bottom: 10px;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .calculator {
+        background: rgb(14, 14, 14);
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        padding: 25px;
+        width: 90%;
+        max-width: 1000px;
+        transition: all 0.3s ease;
+    
+      width: fit-content;  
+      margin: 0 auto;     
+      padding: 20px;     
+  
+    }
+    
+    .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 20px;
+        justify-content: center;
+    }
+    
+    .control-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #6cb4f4;
+    }
+    
+    select, input {
+        padding: 8px 12px;
+        border: 1px solid #0f0f0f;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: all 0.3s;
+    }
+    
+    select:focus, input:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+    }
+    
+    button {
+        background: #3498db;
+        color: rgb(246, 238, 238);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.3s;
+        align-self: flex-end;
+    }
+    
+    button:hover {
+        background: #2980b9;
+        transform: translateY(-2px);
+    }
+    
+    table {
+        margin-top: 5px;
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        animation: fadeIn 0.5s ease-out;
+    }
+    .table-container {
+    width: fit-content; 
+    margin: 0 auto;   
+}
+    th, td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #111111;
+    }
+    
+    th {
+        background-color: #3498db;
+        color: rgb(248, 243, 243);
+        position: sticky;
+        top: 0;
+    }
+    
+    tr:nth-child(even) {
+        background-color: #0f0f10;
+    }
+    
+    tr:hover {
+        background-color: #0d0d0d;
+    }
+    
+    .speed-value {
+        font-weight: bold;
+        color: #e74c3c;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .propeller-info {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #111111;
+        border-radius: 5px;
+        border-left: 5px solid #3498db;
+        animation: slideIn 0.5s ease-out;
+    }
+    
+    @keyframes slideIn {
+        from { opacity: 0; transform: translateX(-20px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    
+    .highlight {
+        animation: highlight 1.5s;
+    }
+    
+    @keyframes highlight {
+        0% { background-color: #0c0c0c; }
+        100% { background-color: transparent; }
+    }
+</style>
+</head>
+<body>
+<h1>🚁 Drone Motor Speed Calculator</h1>
+  <div class="calculator">
+    <div class="controls">
+        <div class="control-group">
+            <label for="kvRating">Motor KV Rating:</label>
+            <select id="kvRating">
+                <option value="1000">1000KV</option>
+                <option value="2300" selected>2300KV</option>
+                <option value="2750">2750KV</option>
+                <option value="6000">6000KV</option>
+                <option value="custom">Custom</option>
+            </select>
+        </div>
+        
+        <div class="control-group" id="customKvGroup" style="display: none;">
+            <label for="customKv">Custom KV:</label>
+            <input type="number" id="customKv" placeholder="Enter KV rating" min="500" max="10000">
+        </div>
+        
+        <div class="control-group">
+            <label for="batteryVoltage">Battery Voltage:</label>
+            <select id="batteryVoltage">
+                <option value="3.7">1S (3.7V)</option>
+                <option value="7.4">2S (7.4V)</option>
+                <option value="11.1" selected>3S (11.1V)</option>
+                <option value="14.8">4S (14.8V)</option>
+                <option value="22.2">6S (22.2V)</option>
+            </select>
+        </div>
+        
+        <div class="control-group">
+            <label for="propPitch">Propeller Pitch (inches):</label>
+            <input type="number" id="propPitch" value="4" min="1" max="10" step="0.1">
+        </div>
+        
+        <button id="calculateBtn">Calculate</button>
+    </div>
+    
+    <div class="results">
+        <table id="resultsTable">
+            <thead>
+                <tr>
+                    <th>KV Rating</th>
+                    <th>Battery</th>
+                    <th>RPM</th>
+                    <th>RPS</th>
+                    <th>Estimated Speed</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Results will be inserted here by JavaScript -->
+            </tbody>
+        </table>
+        
+        <div class="propeller-info" id="propellerInfo">
+            <strong>Note:</strong> Actual speed may vary due to motor load, battery sag, and aerodynamic factors. 
+            Higher pitch propellers increase speed but require more power.
+        </div>
+    </div>
+ </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Elements
+        const kvRatingSelect = document.getElementById('kvRating');
+        const customKvGroup = document.getElementById('customKvGroup');
+        const customKvInput = document.getElementById('customKv');
+        const batteryVoltageSelect = document.getElementById('batteryVoltage');
+        const propPitchInput = document.getElementById('propPitch');
+        const calculateBtn = document.getElementById('calculateBtn');
+        const resultsTable = document.getElementById('resultsTable').getElementsByTagName('tbody')[0];
+        const propellerInfo = document.getElementById('propellerInfo');
+        
+        // Toggle custom KV input
+        kvRatingSelect.addEventListener('change', function() {
+            if (this.value === 'custom') {
+                customKvGroup.style.display = 'flex';
+            } else {
+                customKvGroup.style.display = 'none';
+            }
+        });
+        
+        // Calculate button click handler
+        calculateBtn.addEventListener('click', calculateSpeeds);
+        
+        // Initial calculation
+        calculateSpeeds();
+        
+        function calculateSpeeds() {
+            // Get input values
+            let kvRating;
+            if (kvRatingSelect.value === 'custom') {
+                kvRating = parseFloat(customKvInput.value) || 2300;
+            } else {
+                kvRating = parseFloat(kvRatingSelect.value);
+            }
+            
+            const voltage = parseFloat(batteryVoltageSelect.value);
+            const propPitch = parseFloat(propPitchInput.value);
+            
+            // Clear previous results
+            resultsTable.innerHTML = '';
+            
+            // Calculate for selected KV and voltage
+            addResultRow(kvRating, voltage, propPitch);
+            
+            // Also show some common combinations for comparison
+            if (kvRating !== 1000) addResultRow(1000, voltage, propPitch);
+            if (kvRating !== 2300) addResultRow(2300, voltage, propPitch);
+            if (kvRating !== 2750) addResultRow(2750, voltage, propPitch);
+            if (kvRating !== 6000) addResultRow(6000, voltage, propPitch);
+            
+            // Highlight the selected row
+            setTimeout(() => {
+                const rows = resultsTable.getElementsByTagName('tr');
+                for (let row of rows) {
+                    if (row.dataset.kv == kvRating && row.dataset.voltage == voltage) {
+                        row.classList.add('highlight');
+                    }
+                }
+            }, 100);
+            
+            // Update propeller info
+            propellerInfo.innerHTML = `
+                <strong>Calculation details:</strong> 
+                KV × Voltage = RPM → RPS = RPM/60 → Speed ≈ RPS × ${propPitch}" pitch × 0.0019 × 3600/1000
+                <br><strong>Note:</strong> Actual speed may be 10-30% lower due to motor load and battery sag.
+            `;
+        }
+        
+        function addResultRow(kv, voltage, propPitch) {
+            // Calculate values
+            const rpm = kv * voltage;
+            const rps = rpm / 60;
+            const speedKmh = (rps * propPitch * 0.0019 * 3600) / 1000;
+            
+            // Format values
+            const batteryText = getBatteryText(voltage);
+            const speedText = speedKmh.toFixed(0) + ' km/h';
+            
+            // Create row
+            const row = document.createElement('tr');
+            row.dataset.kv = kv;
+            row.dataset.voltage = voltage;
+            
+            row.innerHTML = `
+                <td>${kv}KV</td>
+                <td>${batteryText}</td>
+                <td>${Math.round(rpm).toLocaleString()}</td>
+                <td>${rps.toFixed(1)}</td>
+                <td class="speed-value">${speedText}</td>
+            `;
+            
+            resultsTable.appendChild(row);
+        }
+        
+        function getBatteryText(voltage) {
+            const batteries = {
+                '3.7': '1S (3.7V)',
+                '7.4': '2S (7.4V)',
+                '11.1': '3S (11.1V)',
+                '14.8': '4S (14.8V)',
+                '22.2': '6S (22.2V)'
+            };
+            return batteries[voltage.toString()] || voltage + 'V';
+        }
+    });
+</script>
+</div>
+<a href="images/habiba-CV.pdf" class="btncv">Download CV</a>
+</div>
+</body>
+</html>
+
