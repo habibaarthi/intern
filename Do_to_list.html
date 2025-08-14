@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #166088;
+            --accent-color: #4fc3f7;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: #f5f5f5;
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1, h2 {
+            color: var(--secondary-color);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .task-form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .task-lists {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .task-list {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .task-item {
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .task-item:hover {
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .task-item.completed {
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--success-color);
+        }
+
+        .task-item.pending {
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .task-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            word-break: break-word;
+        }
+
+        .task-description {
+            color: #666;
+            margin-bottom: 10px;
+            word-break: break-word;
+        }
+
+        .task-meta {
+            font-size: 12px;
+            color: #888;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-complete {
+            background-color: var(--success-color);
+        }
+
+        .btn-edit {
+            background-color: #ffc107;
+        }
+
+        .btn-delete {
+            background-color: var(--danger-color);
+        }
+
+        .empty-message {
+            color: #888;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .task-lists {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Task Manager</h1>
+        
+        <div class="task-form">
+            <h2>Add New Task</h2>
+            <form id="taskForm">
+                <div class="form-group">
+                    <label for="taskTitle">Task Title</label>
+                    <input type="text" id="taskTitle" required placeholder="What needs to be done?">
+                </div>
+                <div class="form-group">
+                    <label for="taskDescription">Description (Optional)</label>
+                    <textarea id="taskDescription" placeholder="Add details about the task..."></textarea>
+                </div>
+                <button type="submit">Add Task</button>
+            </form>
+        </div>
+        
+        <div class="task-lists">
+            <div class="task-list">
+                <h2>Pending Tasks</h2>
+                <div id="pendingTasks">
+                    <p class="empty-message">No pending tasks. Add a task to get started!</p>
+                </div>
+            </div>
+            
+            <div class="task-list">
+                <h2>Completed Tasks</h2>
+                <div id="completedTasks">
+                    <p class="empty-message">No completed tasks yet.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const taskForm = document.getElementById('taskForm');
+            const pendingTasksList = document.getElementById('pendingTasks');
+            const completedTasksList = document.getElementById('completedTasks');
+            
+            // Load tasks from localStorage
+            let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+            
+            // Render all tasks
+            renderTasks();
+            
+            // Form submission
+            taskForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const titleInput = document.getElementById('taskTitle');
+                const descInput = document.getElementById('taskDescription');
+                
+                const newTask = {
+                    id: Date.now(),
+                    title: titleInput.value.trim(),
+                    description: descInput.value.trim(),
+                    completed: false,
+                    createdAt: new Date().toISOString(),
+                    completedAt: null
+                };
+                
+                tasks.push(newTask);
+                saveTasks();
+                renderTasks();
+                
+                // Reset form
+                taskForm.reset();
+                titleInput.focus();
+            });
+            
+            // Render tasks function
+            function renderTasks() {
+                // Clear current lists
+                pendingTasksList.innerHTML = '';
+                completedTasksList.innerHTML = '';
+                
+                // Separate completed and pending tasks
+                const pendingTasks = tasks.filter(task => !task.completed);
+                const completedTasks = tasks.filter(task => task.completed);
+                
+                // Show empty messages if no tasks
+                if (pendingTasks.length === 0) {
+                    pendingTasksList.innerHTML = '<p class="empty-message">No pending tasks. Add a task to get started!</p>';
+                }
+                
+                if (completedTasks.length === 0) {
+                    completedTasksList.innerHTML = '<p class="empty-message">No completed tasks yet.</p>';
+                }
+                
+                // Render pending tasks
+                pendingTasks.forEach(task => {
+                    pendingTasksList.appendChild(createTaskElement(task));
+                });
+                
+                // Render completed tasks
+                completedTasks.forEach(task => {
+                    completedTasksList.appendChild(createTaskElement(task));
+                });
+            }
+            
+            // Create task element
+            function createTaskElement(task) {
+                const taskElement = document.createElement('div');
+                taskElement.className = `task-item ${task.completed ? 'completed' : 'pending'}`;
+                taskElement.dataset.id = task.id;
+                
+                const formattedDate = new Date(task.createdAt).toLocaleString();
+                const completedDate = task.completedAt ? new Date(task.completedAt).toLocaleString() : '';
+                
+                taskElement.innerHTML = `
+                    <div class="task-title">${task.title}</div>
+                    ${task.description ? `<div class="task-description">${task.description}</div>` : ''}
+                    <div class="task-meta">
+                        <span>Added: ${formattedDate}</span>
+                        ${task.completed ? `<span>Completed: ${completedDate}</span>` : ''}
+                    </div>
+                    <div class="task-actions">
+                        ${!task.completed ? `<button class="btn-complete" data-action="complete">Complete</button>` : ''}
+                        <button class="btn-edit" data-action="edit">Edit</button>
+                        <button class="btn-delete" data-action="delete">Delete</button>
+                    </div>
+                `;
+                
+                return taskElement;
+            }
+            
+            // Event delegation for task actions
+            document.addEventListener('click', function(e) {
+                if (e.target.dataset.action) {
+                    const taskElement = e.target.closest('.task-item');
+                    const taskId = parseInt(taskElement.dataset.id);
+                    const taskIndex = tasks.findIndex(task => task.id === taskId);
+                    
+                    if (taskIndex === -1) return;
+                    
+                    const task = tasks[taskIndex];
+                    
+                    switch (e.target.dataset.action) {
+                        case 'complete':
+                            task.completed = true;
+                            task.completedAt = new Date().toISOString();
+                            saveTasks();
+                            renderTasks();
+                            break;
+                            
+                        case 'edit':
+                            editTask(task);
+                            break;
+                            
+                        case 'delete':
+                            tasks.splice(taskIndex, 1);
+                            saveTasks();
+                            renderTasks();
+                            break;
+                    }
+                }
+            });
+            
+            // Edit task function
+            function editTask(task) {
+                const newTitle = prompt('Edit task title:', task.title);
+                if (newTitle !== null) {
+                    task.title = newTitle.trim();
+                    
+                    const newDescription = prompt('Edit task description:', task.description);
+                    task.description = newDescription !== null ? newDescription.trim() : task.description;
+                    
+                    saveTasks();
+                    renderTasks();
+                }
+            }
+            
+            // Save tasks to localStorage
+            function saveTasks() {
+                localStorage.setItem('tasks', JSON.stringify(tasks));
+            }
+        });
+    </script>
+</body>
+</html>
